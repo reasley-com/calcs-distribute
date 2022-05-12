@@ -27,6 +27,21 @@ Build to service container.
 
 <br>
 
+Configure an env file with server information
+<pre>
+cat &lt;&lt;EOF &gt; .env
+WDS_SOCKET_PORT=0
+MONGO_INITDB_ROOT_USERNAME=&lt;ID&gt;
+MONGO_INITDB_ROOT_PASSWORD=&lt;Password&gt;
+REACT_APP_CALCS_HOST=&lt;Domain&gt;
+REACT_APP_CALCS_FE=443
+REACT_APP_CALCS_BE=8000
+REACT_APP_CALCS_DB=27017
+EOF
+</pre>
+
+<br>
+
 Compose and certificate issued.
 <pre>$ ./compose.sh</pre>
 
