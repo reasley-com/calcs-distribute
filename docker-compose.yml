@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  calcs-fe:
+    image: calcs-fe
+    container_name: calcs-fe
+    networks:
+      - calcs
+    working_dir: /app
+    env_file:
+      - .env
+  calcs-be:
+    image: calcs-be
+    container_name: calcs-be
+    networks:
+      - calcs
+    working_dir: /app
+  calcs-db:
+    image: mongo:5.0.7
+    container_name: calcs-db
+    env_file:
+      - .env
+    networks:
+      - calcs
+    volumes:
+      - ~/data/db:/data/db
+  calcs-proxy:
+     container_name: calcs-proxy
+     image: calcs-proxy
+     networks:
+      - calcs
+     ports:
+      - 80:80
+      - 443:443
+      - 8000:8000
+     volumes:
+      - ~/data/certbot/letsencrypt:/etc/letsencrypt
+      - ~/data/certbot/www:/var/www/certbot
+  calcs-certbot:
+     container_name: calcs-certbot
+     image: certbot/certbot:v1.27.0
+     # restart: always
+     volumes:
+      - ~/data/certbot/letsencrypt:/etc/letsencrypt
+      - ~/data/certbot/www:/var/www/certbot
+     command: certonly --webroot --webroot-path=/var/www/certbot --email reasley.com@gmail.com --agree-tos --no-eff-email --force-renewal -d calcs.kr --dry-run
+networks:
+  calcs:
+    driver: bridge
